@@ -8,13 +8,9 @@ describe Api::UsersController do
 
   describe "create" do
     it "creates and returns a new user from username and password params" do
-      params = { 'new_user' => { 'username' => 'testuser', 'password' => 'testpass' } }
-
-      expect{ post :create, params }
-        .to change{ User.where(params['new_user']).count }
-        .by 1
-
-      JSON.parse(response.body).should == params['new_user']
+      params = { 'user' => { 'username' => 'testuser', 'password' => 'testpass' } }
+      expect{ post :create, params }.to change{ User.count }.by 1
+      expect(JSON.parse(response.body)).to eql(params)
     end
 
     it "returns an error when not given a password" do
@@ -44,7 +40,7 @@ describe Api::UsersController do
             { 'id' => 2, 'username' => 'name2' },
             { 'id' => 3, 'username' => 'name3' }
           ]
-        }
+      }
     end
   end
 end
