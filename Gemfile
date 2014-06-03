@@ -16,6 +16,8 @@ gem 'active_model_serializers'
 group :development, :test do
   gem 'sqlite3'
   gem 'pry'
+  gem 'pry-nav'
+  gem 'pry-remote'
   gem 'binding_of_caller'
 end
 

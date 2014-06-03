@@ -7,9 +7,12 @@ describe Api::ListsController do
       it "takes a list name, creates it if it doesn't exist, and returns false if it does" do
         user = FactoryGirl.create(:user)
         json = { :user_id => user.id, :format => 'json', :list => { :name => "testlist" } }
-        post :create, json
-        expect(response.status).to eql 200
 
+        expect{ post :create, json }.to change{ List.count }.by 1
+        expect(JSON.parse(response.body)).to eql(json)
+
+        # post :create, json
+        # expect(response.status).to eql 200
         # params = { 'list' => { listname: 'testlist' } } 
         # expect{ post :create, params }.to change{ List.count }.by 1 
       end

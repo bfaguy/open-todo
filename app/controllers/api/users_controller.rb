@@ -8,8 +8,8 @@ class Api::UsersController < ApiController
       render json: @user
     else
       message = "User was not created"
-      
-      render :json => { :errors => @user.errors.as_json }, :status => 420
+      error(400, message)
+      #render :json => { :errors => @user.errors.as_json }, :status => 420
       # render :json => { :errors => message }, :status => 422
     end
   end
