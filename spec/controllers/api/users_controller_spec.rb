@@ -14,12 +14,13 @@ describe Api::UsersController do
     end
 
     it "returns an error when not given a password" do
-      post :create, { username: 'testuser' }
-      response.should be_error
+      post :create, { 'user' => { username: 'testuser' } }
+      expect(response).to be_error 
+      expect(response.body).to include "User was not create"
     end
 
     it "returns an error when not given a username" do
-      post :create, { password: 'testpass' }
+      post :create, { 'user' => { password: 'testpass' } }
       response.should be_error
     end
   end

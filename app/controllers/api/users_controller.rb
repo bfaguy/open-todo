@@ -1,15 +1,25 @@
 class Api::UsersController < ApiController
 
   def create
-    new_user = User.new(user_params)
+    @user = User.new(user_params)
 
-    if new_user.save
-      render json: UserSerializer.new(new_user).to_json
+    if @user.save
+      #render json: UserSerializer.new(@user).to_json
+      render json: @user
     else
       message = "User was not created"
-      error(500, message)
+      
+      render :json => { :errors => @user.errors.as_json }, :status => 420
+      # render :json => { :errors => message }, :status => 422
     end
   end
+
+  def index
+    @users = User.all 
+    render json: @users, each_serializer: IndexUserSerializer
+  end
+
+  private
 
   def user_params
     params.require(:user).permit(:username, :password)
