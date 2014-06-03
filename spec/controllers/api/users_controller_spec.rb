@@ -15,13 +15,16 @@ describe Api::UsersController do
 
     it "returns an error when not given a password" do
       post :create, { 'user' => { username: 'testuser' } }
-      expect(response).to be_error 
-      expect(response.body).to include "User was not create"
+      expect(response).to be_unprocessable
+      expect(response.body).to include "User was not created"
+      expect(assigns(:user).errors.messages).to include :password
     end
 
     it "returns an error when not given a username" do
       post :create, { 'user' => { password: 'testpass' } }
-      response.should be_error
+      expect(response).to be_unprocessable
+      expect(response.body).to include "User was not created"
+      expect(assigns(:user).errors.messages).to include :username
     end
   end
 
