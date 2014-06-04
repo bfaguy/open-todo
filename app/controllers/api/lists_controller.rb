@@ -3,6 +3,7 @@ class Api::ListsController < ApiController
     if User.where(username: params[:user][:username], password: params[:user][:password]).exists?
       @user = User.where(username: params[:user][:username], password: params[:user][:password]).first
       @list = List.new(name: params[:list][:name], user_id: @user.id, permissions: params[:list][:permissions])
+
       if @list.save
         render json: @list
       else

@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Api::UsersController do
 
-  before do
-    User.destroy_all
-  end
-
   describe "create" do
     it "creates and returns a new user from username and password params" do
       params = { 'user' => { 'username' => 'testuser', 'password' => 'testpass' } }

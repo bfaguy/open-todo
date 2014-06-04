@@ -15,7 +15,7 @@ describe Api::ListsController do
         user = FactoryGirl.create(:user)
         list = FactoryGirl.create(:list, user_id: user.id)
         json = {:user => {:username => user.username, :password => user.password},
-          :list => {:name => list.name, :user_id => user.id, :permissions => "private"}}
+          :list => {:name => list.name, :permissions => "private"}}
         expect{ post :create, json }.to_not change{ List.count }.by 1
         expect(response.body).to include "List was not created"
         expect(assigns(:list).errors.messages.to_s).to include "List name already exists"
