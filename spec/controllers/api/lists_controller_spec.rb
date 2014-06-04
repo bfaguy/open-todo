@@ -18,9 +18,10 @@ describe Api::ListsController do
         list = FactoryGirl.build(:list)
         list.user_id = user.id 
         list.save
-        json = {:list => {:name => "Shopping List", :user_id => user.id, :permissions => "private"}}
+        json = {:user => {:username => user.username, :password => user.password}, :list => {:name => "Shopping List", :user_id => user.id, :permissions => "private"}}
 
         expect{ post :create, json }.to_not change{ List.count }.by 1
+        expect(response.body).to include "List was not created"
       end
 
       context "without correct user's password" do
