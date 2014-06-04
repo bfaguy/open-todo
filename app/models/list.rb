@@ -2,6 +2,9 @@ class List < ActiveRecord::Base
   belongs_to :user
   has_many :items
 
+  validates :user_id,
+            :uniqueness => {:scope => :name, :message => "List name already exists"}
+
   def self.permission_options
     %w(private viewable open)
   end
