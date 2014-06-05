@@ -26,6 +26,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'  
   gem 'rspec'
+  gem 'database_cleaner'
 end
 
 group :production do
