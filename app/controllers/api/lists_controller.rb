@@ -14,6 +14,12 @@ class Api::ListsController < ApiController
         error(422, message) # unprocessable_entity
     end
   end
+
+  def index
+    lists = User.where(user_params).first.lists
+    render json: lists, each_serializer: IndexListSerializer
+  end
+
   private
 
   def user_params
