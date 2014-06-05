@@ -42,6 +42,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    database_cleaner (1.2.0)
     debug_inspector (0.0.2)
     diff-lcs (1.2.5)
     erubis (2.7.0)
@@ -104,6 +105,8 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -162,6 +165,7 @@ DEPENDENCIES
   bootstrap
   bootstrap-sass
   coffee-rails (~> 4.0.0)
+  database_cleaner
   factory_girl_rails
   haml
   haml-rails
@@ -172,6 +176,7 @@ DEPENDENCIES
   pry-nav
   pry-remote
   rails (= 4.0.3)
+  rest-client
   rspec
   rspec-rails
   sass-rails (~> 4.0.0)

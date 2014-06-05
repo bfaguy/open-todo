@@ -14,6 +14,7 @@ gem 'jquery-rails'
 gem 'active_model_serializers'
 
 group :development, :test do
+  gem 'rest-client'
   gem 'sqlite3'
   gem 'pry'
   gem 'pry-nav'
@@ -25,6 +26,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'  
   gem 'rspec'
+  gem 'database_cleaner'
 end
 
 group :production do
