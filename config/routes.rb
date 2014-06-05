@@ -6,10 +6,8 @@ Todo::Application.routes.draw do
     end
 
     resources :lists, only: [:create] do
-      resources :items, only: [:create, :new] #, controller: 'lists/items'
+      resources :items, only: [:create, :new], controller: 'lists/items'
     end
-
-    resources :items, only: [:create, :destroy]
 
     root to: 'users#new'
   end
