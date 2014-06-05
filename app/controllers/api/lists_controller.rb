@@ -16,4 +16,9 @@ class Api::ListsController < ApiController
     end
   end
 
+  def index
+    lists = List.all
+    render json: lists, each_serializer: IndexListSerializer
+  end
+
 end
