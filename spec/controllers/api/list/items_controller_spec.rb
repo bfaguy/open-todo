@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Api::ListsController::ItemsController do 
+scribe Api::ListsController::ItemsController do 
   describe "#create" do
     let(:user) { FactoryGirl.create(:user) }
     let(:credentials) { {:user => {:username => user.username, :password => user.password}} }
