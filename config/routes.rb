@@ -11,6 +11,5 @@ Todo::Application.routes.draw do
 
   end
 
-
-      root to: 'users#new'
+  root to: 'users#new'
 end
