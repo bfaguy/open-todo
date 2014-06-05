@@ -16,7 +16,7 @@ class Api::ListsController < ApiController
   end
 
   def index
-    lists = List.all
+    lists = User.where(user_params).first.lists
     render json: lists, each_serializer: IndexListSerializer
   end
 
