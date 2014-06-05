@@ -1,8 +1,8 @@
 class Api::ListsController < ApiController
   def create 
-    if User.where(username: params[:user][:username], password: params[:user][:password]).exists?
-      @user = User.where(username: params[:user][:username], password: params[:user][:password]).first
-      @list = List.new(name: params[:list][:name], user_id: @user.id, permissions: params[:list][:permissions])
+    @user = User.where(user_params).first
+    if @user
+      @list = @user.lists.build(list_params)
       if @list.save
         render json: @list
       else
@@ -14,5 +14,12 @@ class Api::ListsController < ApiController
         error(422, message) # unprocessable_entity
     end
   end
+  private
 
+  def user_params
+    params.require(:user).permit(:username, :password)
+  end
+  def list_params
+    params.require(:list).permit(:name, :permissions)
+  end
 end
