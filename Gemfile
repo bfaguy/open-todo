@@ -14,6 +14,7 @@ gem 'jquery-rails'
 gem 'active_model_serializers'
 
 group :development, :test do
+  gem 'rest-client'
   gem 'sqlite3'
   gem 'pry'
   gem 'pry-nav'

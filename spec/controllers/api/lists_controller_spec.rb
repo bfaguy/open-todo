@@ -3,19 +3,20 @@ require 'spec_helper'
 describe Api::ListsController do 
 
   describe "#create" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:credentials) { {:user => {:username => user.username, :password => user.password}} }
+    let(:invalid_credentials) { {:user => {:username => user.username, :password => "failed"}} }
+
     context "with correct user's password" do
 
       it "creates list succesfully" do
-        user = create(:user)
-        json = {:user => {:username => user.username, :password => user.password}, :list => {:name => "Shopping List", :permissions => "private"}}
+        json = credentials.merge({:list => {:name => "Shopping List", :permissions => "private"}})
         expect{ post :create, json }.to change{ List.count }.by 1
       end
 
       it "cannot create list if list name already exists" do
-        user = create(:user)
-        list = create(:list, user_id: user.id)
-        json = {:user => {:username => user.username, :password => user.password},
-          :list => {:name => list.name, :permissions => "private"}}
+        list = FactoryGirl.create(:list, user: user)
+        json = credentials.merge(:list => {:name => list.name, :user_id => user.id, :permissions => "private"})
         expect{ post :create, json }.to_not change{ List.count }.by 1
         expect(response.body).to include "List was not created"
         expect(assigns(:list).errors.messages.to_s).to include "List name already exists"
@@ -23,9 +24,8 @@ describe Api::ListsController do
     end
 
     context "without correct user's password" do
-      it "should return an error" do
-        user = create(:user)
-        json = {:user => {:username => user.username, :password => "failed"}, :list => {:name => "Shopping List", :permissions => "private"}}
+      it "it errors" do
+        json = invalid_credentials.merge({:list => {:name => "Shopping List", :permissions => "private"}})
         expect{ post :create, json }.to_not change{ List.count }.by 1
         expect(response.body).to include "User credentials are not correct"
       end
