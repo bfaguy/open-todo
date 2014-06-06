@@ -16,8 +16,13 @@ class Api::ListsController < ApiController
   end
 
   def index
-    lists = User.where(user_params).first.lists
-    render json: lists, each_serializer: IndexListSerializer
+    @user = User.where(user_params).first
+    if @user
+      lists = @user.lists
+      render json: lists, each_serializer: IndexListSerializer
+    else
+      error(422, "User credentials are not correct") # unprocessable_entity
+    end
   end
 
   private
