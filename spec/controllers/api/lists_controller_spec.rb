@@ -70,7 +70,7 @@ describe Api::ListsController do
               {"id"=>ids[1], "name"=>"list 1"},
               {"id"=>ids[2], "name"=>"list 2"}
             ]
-        }
+          }
         )
       end
     end
@@ -82,5 +82,30 @@ describe Api::ListsController do
       end
     end
   end
+
+  describe "#show" do
+    context "with correct user's password" do
+      it "returns a list based on a list id" do
+        list = create(:list, user_id: user.id, name: "list n")
+        item = create(:item, list_id: list.id, description: "item 1") 
+        item2 = create(:item, list_id: list.id, description: "item 2") 
+
+        get :show, :id => list, user: credentials[:user]
+        expect(JSON.parse(response.body)).to eql(
+          {"list" =>
+            {"id" => list.id, 
+              "name" => list.name,
+              "items" =>
+              [
+                {"id" => item.id, "description" => item.description },
+                {"id" => item2.id, "description" => item2.description }
+              ]
+            }
+          }
+        )
+      end
+    end
+  end
+
 
 end

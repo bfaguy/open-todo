@@ -19,7 +19,7 @@ describe Api::ItemsController do
         expect(response.status).to eql 200
         expect(JSON.parse(response.body)).to eql(
           {"item" => 
-            {"id"=>list.items.first.id, "description"=>"Feed boy", "completed"=>false}
+            {"id"=>list.items.first.id, "description"=>"Feed boy"}
           }
         )
       end

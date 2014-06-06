@@ -25,7 +25,20 @@ class Api::ListsController < ApiController
     end
   end
 
+  def show
+    @user = User.where(user_params).first
+    @list = @user.lists.find(params[:id])
+    if @user
+      # items = @user.lists.find(params[:id]).items.all
+      # render json: items, each_serializer: IndexItemSerializer
+      render json: @list, serializer: ListSerializer
+    else
+      error(422, "User credentials are not correct") # unprocessable_entity
+    end
+  end
+
   private
+
 
   def user_params
     params.require(:user).permit(:username, :password)
