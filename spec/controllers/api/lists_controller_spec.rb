@@ -76,7 +76,10 @@ describe Api::ListsController do
     end
 
     context "without correct user's password" do
-      it "returns all visible and open lists"
+      it "returns all visible and open lists" do
+        get :index, invalid_credentials
+        expect(response.body).to include "User credentials are not correct"
+      end
     end
   end
 
