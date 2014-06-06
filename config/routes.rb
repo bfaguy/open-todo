@@ -9,8 +9,7 @@ Todo::Application.routes.draw do
       resources :items, only: [:create, :new]
     end
 
-    resources :items, only: [:destroy]
-
-    root to: 'users#new'
   end
+
+  root to: 'users#new'
 end
