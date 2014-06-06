@@ -1,18 +1,25 @@
 class Api::ItemsController < ApiController
 
   def create
-    @list = List.find(params[:list_id])
-    if @list.add(item_params[:description])
-      render json: @list.items.last
+    @user = User.where(user_params).first
+    if @user
+      @list = @user.lists.find(params[:list_id])
+      if @list.add(item_params[:description])
+        render json: @list.items.last
+      else
+        error(422, "Item was not created")
+      end
     else
-      message = "Item was not created"
-      error(422, message)
+      error(422, "User credentials are not correct")
     end
   end
 
   private
 
+  def user_params
+    params.require(:user).permit(:username, :password)
+  end
   def item_params
-    params.require(:item).permit(:description, :list_id, :completed)
+    params.require(:item).permit(:description)
   end
 end
