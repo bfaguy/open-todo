@@ -107,5 +107,29 @@ describe Api::ListsController do
     end
   end
 
+  describe "#destroy" do
+    context "with correct user's password" do
+      it "deletes and returns list" do
+        list = create(:list, user_id: user.id, name: "list n")
+        create(:item, list_id: list.id, description: "item 1") 
+        create(:item, list_id: list.id, description: "item 2") 
 
+        expect(response.status).to eql 200
+
+        expect{ 
+          delete :destroy, :id => list, user: credentials[:user]
+        }.to change{ List.count }.by (-1)
+
+        expect(List.exists?(list.id)).to be false
+
+        expect(JSON.parse(response.body)).to eql(
+          "basic_list" =>{
+            "id"=>list.id,
+            "name"=>list.name,
+            "user_id"=>user.id,
+            "user_name"=>user.username}
+        )
+      end
+    end
+  end
 end

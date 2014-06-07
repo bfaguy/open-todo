@@ -12,10 +12,6 @@ describe Api::ItemsController do
         item = {description: "Feed boy"}
         post :create, :list_id => list, item: item, user: credentials
 
-        # Restclient.post 'http://lvh.m:3000/api/list#create', json
-        # Restclient.post 'http://lvh.m:3000/api/list#create', json
-        # /api/lists/:list_id/items(.:format) 
-
         expect(response.status).to eql 200
         expect(JSON.parse(response.body)).to eql(
           {"item" => 
