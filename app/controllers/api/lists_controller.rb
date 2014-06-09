@@ -11,8 +11,8 @@ class Api::ListsController < ApiController
         error(422, message) # unprocessable_entity
       end
     else
-        message = "User credentials are not correct"
-        error(422, message) # unprocessable_entity
+      message = "User credentials are not correct"
+      error(422, message) # unprocessable_entity
     end
   end
 
@@ -51,8 +51,28 @@ class Api::ListsController < ApiController
     end
   end
 
-  private
+  def update
+    @user = User.where(user_params).first
+    if @user
+      @list = List.find(params[:id])
+      if @list.permissions_editable?(@user)
+        #change anything
+        @list.update_attributes(list_params)
+        render json: @list
+      elsif @list.list_open?
+        @list.update_attributes(name: params[:list][:name])
+        render json: @list
+      else
+        #render error
+        error(401, "You do not have permissions")
+      end
+    else
+      message = "User credentials are not correct"
+      error(422, message) # unprocessable_entity
+    end
+  end
 
+  private
 
   def user_params
     params.require(:user).permit(:username, :password)
@@ -60,4 +80,5 @@ class Api::ListsController < ApiController
   def list_params
     params.require(:list).permit(:name, :permissions)
   end
+
 end
