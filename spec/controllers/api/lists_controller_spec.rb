@@ -97,8 +97,8 @@ describe Api::ListsController do
               "name" => list.name,
               "items" =>
               [
-                {"id" => item.id, "description" => item.description },
-                {"id" => item2.id, "description" => item2.description }
+                {"id" => item.id, "description" => item.description, "completed"=> item.completed },
+                {"id" => item2.id, "description" => item2.description, "completed" => item.completed }
               ]
             }
           }

@@ -14,6 +14,14 @@ class Api::ItemsController < ApiController
     end
   end
 
+  def update
+    @item = Item.find(params[:id])
+    @item.completed = params[:completed]
+    if @item.save
+      render json: @item
+    end
+  end
+
   private
 
   def user_params
