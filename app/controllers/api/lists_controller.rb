@@ -1,4 +1,5 @@
 class Api::ListsController < ApiController
+
   def create 
     @user = User.where(user_params).first
     if @user
@@ -10,8 +11,8 @@ class Api::ListsController < ApiController
         error(422, message) # unprocessable_entity
       end
     else
-        message = "User credentials are not correct"
-        error(422, message) # unprocessable_entity
+      message = "User credentials are not correct"
+      error(422, message) # unprocessable_entity
     end
   end
 
@@ -30,10 +31,23 @@ class Api::ListsController < ApiController
     @list = @user.lists.find(params[:id])
     if @user
       # items = @user.lists.find(params[:id]).items.all
-      # render json: items, each_serializer: IndexItemSerializer
-      render json: @list, serializer: ListSerializer
+      render json: @list
     else
       error(422, "User credentials are not correct") # unprocessable_entity
+    end
+  end
+
+  def destroy
+    @user = User.where(user_params).first
+    @list = @user.lists.find(params[:id])
+    if @user
+      if @list.destroy
+        render json: @list, serializer: BasicListSerializer
+      else
+        error(422, "List could not be deleted")
+      end
+    else
+      error(422, "User credentials are not correct") 
     end
   end
 
@@ -53,13 +67,12 @@ class Api::ListsController < ApiController
         error(401, "You do not have permissions")
       end
     else
-        message = "User credentials are not correct"
-        error(422, message) # unprocessable_entity
+      message = "User credentials are not correct"
+      error(422, message) # unprocessable_entity
     end
   end
 
   private
-
 
   def user_params
     params.require(:user).permit(:username, :password)
@@ -67,4 +80,5 @@ class Api::ListsController < ApiController
   def list_params
     params.require(:list).permit(:name, :permissions)
   end
+
 end

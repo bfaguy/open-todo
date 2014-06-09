@@ -70,7 +70,7 @@ describe Api::ListsController do
               {"id"=>ids[1], "name"=>"list 1"},
               {"id"=>ids[2], "name"=>"list 2"}
             ]
-          }
+        }
         )
       end
     end
@@ -97,12 +97,38 @@ describe Api::ListsController do
               "name" => list.name,
               "permissions" => "private",
               "items" =>
-              [
-                {"id" => item.id, "description" => item.description },
-                {"id" => item2.id, "description" => item2.description }
-              ]
+            [
+              {"id" => item.id, "description" => item.description },
+              {"id" => item2.id, "description" => item2.description }
+            ]
             }
-          }
+        }
+        )
+      end
+    end
+  end
+
+  describe "#destroy" do
+    context "with correct user's password" do
+      it "deletes and returns list" do
+        list = create(:list, user_id: user.id, name: "list n")
+        create(:item, list_id: list.id, description: "item 1") 
+        create(:item, list_id: list.id, description: "item 2") 
+
+        expect(response.status).to eql 200
+
+        expect{ 
+          delete :destroy, :id => list, user: credentials[:user]
+        }.to change{ List.count }.by (-1)
+
+        expect(List.exists?(list.id)).to be false
+
+        expect(JSON.parse(response.body)).to eql(
+          "basic_list" =>{
+          "id"=>list.id,
+          "name"=>list.name,
+          "user_id"=>user.id,
+          "user_name"=>user.username}
         )
       end
     end
@@ -121,11 +147,11 @@ describe Api::ListsController do
               "name" => "I'm the owner",
               "permissions" => "viewable",
               "items" =>
-                [
-                  {"id" => item.id, "description" => item.description },
-                ]
+            [
+              {"id" => item.id, "description" => item.description },
+            ]
             }
-          }
+        }
         )
       end
     end
@@ -143,11 +169,11 @@ describe Api::ListsController do
               "name" => "I'm not the owner",
               "permissions" => "open",
               "items" =>
-                [
-                  {"id" => item.id, "description" => item.description },
-                ]
+            [
+              {"id" => item.id, "description" => item.description },
+            ]
             }
-          }
+        }
         )
       end
       it "can not update private lists" do
@@ -165,7 +191,6 @@ describe Api::ListsController do
         put :update, :id => list.id, :user=> credentials[:user], :list => {:name => "I'm not the owner", :permissions => "viewable"}
         expect(response.status).to eq(401)
       end
-
     end
   end
 
