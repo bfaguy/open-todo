@@ -6,7 +6,7 @@ Todo::Application.routes.draw do
     end
 
     resources :lists, except: [:edit, :new] do
-      resources :items, only: [:create, :new]
+      resources :items, only: [:create, :new, :update]
     end
 
   end

@@ -97,12 +97,12 @@ describe Api::ListsController do
               "name" => list.name,
               "permissions" => "private",
               "items" =>
-            [
-              {"id" => item.id, "description" => item.description },
-              {"id" => item2.id, "description" => item2.description }
-            ]
+              [
+                {"id" => item.id, "description" => item.description, "completed"=> item.completed },
+                {"id" => item2.id, "description" => item2.description, "completed" => item.completed }
+              ]
             }
-        }
+          }
         )
       end
     end
@@ -135,7 +135,7 @@ describe Api::ListsController do
   end
 
   describe "#update" do
-    context "with correct user's password, and ownder of list, can update permissions and name" do
+    context "with correct user's password, and owner of list, can update permissions and name" do
       it "returns an updated list with permissions changed" do
         list = create(:list, user_id: user.id, name: "list n")
         item = create(:item, list_id: list.id, description: "item 1") 
@@ -148,10 +148,10 @@ describe Api::ListsController do
               "permissions" => "viewable",
               "items" =>
             [
-              {"id" => item.id, "description" => item.description },
+              {"id" => item.id, "description" => item.description, "completed" => item.completed },
             ]
             }
-        }
+         }
         )
       end
     end
@@ -162,7 +162,8 @@ describe Api::ListsController do
         list = create(:list, user_id: @list_owner.id, name: "list n", permissions: "open")
         item = create(:item, list_id: list.id, description: "item 1") 
 
-        put :update, :id => list.id, :user=> credentials[:user], :list => {:name => "I'm not the owner", :permissions => "viewable"}
+        put :update, :id => list.id, :user=> credentials[:user], 
+          :list => {:name => "I'm not the owner", :permissions => "viewable"}
         expect(JSON.parse(response.body)).to eql(
           {"list" =>
             {"id" => list.id, 
@@ -170,17 +171,19 @@ describe Api::ListsController do
               "permissions" => "open",
               "items" =>
             [
-              {"id" => item.id, "description" => item.description },
+              {"id" => item.id, "description" => item.description, "completed" => item.completed },
             ]
             }
-        }
+          }
         )
       end
+
       it "can not update private lists" do
         @list_owner = create(:user)
         list = create(:list, user_id: @list_owner.id, name: "list n", permissions: "private")
 
-        put :update, :id => list.id, :user=> credentials[:user], :list => {:name => "I'm not the owner", :permissions => "viewable"}
+        put :update, :id => list.id, :user=> credentials[:user],
+          :list => {:name => "I'm not the owner", :permissions => "viewable"}
         expect(response.status).to eq(401)
       end
 
@@ -188,7 +191,8 @@ describe Api::ListsController do
         @list_owner = create(:user)
         list = create(:list, user_id: @list_owner.id, name: "list n", permissions: "viewable")
 
-        put :update, :id => list.id, :user=> credentials[:user], :list => {:name => "I'm not the owner", :permissions => "viewable"}
+        put :update, :id => list.id, :user=> credentials[:user], 
+          :list => {:name => "I'm not the owner", :permissions => "viewable"}
         expect(response.status).to eq(401)
       end
     end
